@@ -17,11 +17,15 @@ The intended workflow is:
 scripts/
   Initialize-SmartPakAutomation.ps1
   SmartPakPriceUpload.ps1
+  macos/
+    Initialize-SmartPakAutomation.zsh
+    SmartPakPriceUpload.zsh
 sql/
   smartpak_price_update_candidates.sql
   market_pricing_clean_parameterized.sql
   legacy/
 docs/
+launchd/
 templates/
   ProductPriceUpdateTemplate.csv
 ```
@@ -55,6 +59,8 @@ Dry run passed. Submission performed: No.
 ```
 
 See the operational guide in [`docs/windows-automation.md`](docs/windows-automation.md) for folder behavior, Task Scheduler configuration, safeguards, and controlled production enablement.
+
+For the Chewy Mac pilot, see [`docs/macos-automation.md`](docs/macos-automation.md). It uses `curl --ntlm`, macOS Keychain, Chewy OneDrive, and a `launchd` LaunchAgent that defaults to dry run.
 
 ## Security
 

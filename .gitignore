@@ -1,0 +1,29 @@
+# Credentials and production enablement
+*.clixml
+**/Secrets/**
+**/EnableProductionUpload.flag*
+
+# Runtime folders and state
+**/Incoming/**
+**/Processing/**
+**/Archive/**
+**/Failed/**
+**/Logs/**
+**/State/**
+*.log
+*-response.html
+ProcessedFiles.csv
+*.lock
+
+# Price files and incomplete exports
+*.csv
+!templates/*.csv
+*.partial
+*.tmp
+
+# Local packaging and editor files
+*.zip
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

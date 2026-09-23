@@ -149,6 +149,22 @@ function Add-LedgerEntry {
     } | Export-Csv -LiteralPath $LedgerPath -NoTypeInformation -Append
 }
 
+function Close-UploadContent {
+    if ($null -ne $script:Multipart) {
+        $script:Multipart.Dispose()
+    }
+    elseif ($null -ne $script:FileContent) {
+        $script:FileContent.Dispose()
+    }
+    elseif ($null -ne $script:FileStream) {
+        $script:FileStream.Dispose()
+    }
+
+    $script:Multipart = $null
+    $script:FileContent = $null
+    $script:FileStream = $null
+}
+
 try {
     foreach ($RequiredDirectory in @(
         $IncomingPath,
@@ -327,6 +343,9 @@ try {
     $PostHtml = $PostResponse.Content.ReadAsStringAsync().GetAwaiter().GetResult()
     Set-Content -LiteralPath $ResponsePath -Value $PostHtml -Encoding UTF8
 
+    # Multipart owns the file content and stream. Release it before moving the CSV.
+    Close-UploadContent
+
     if (-not $PostResponse.IsSuccessStatusCode) {
         throw "SmartPak submission returned HTTP $([int]$PostResponse.StatusCode)."
     }
@@ -369,6 +388,9 @@ try {
 catch {
     $FailureMessage = $_.Exception.Message
 
+    # A failed POST can leave the source stream open. Close it before quarantine.
+    Close-UploadContent
+
     if (Test-Path -LiteralPath $LogsDirectory -PathType Container) {
         Write-RunLog -Level ERROR -Message $FailureMessage
     }
@@ -408,15 +430,7 @@ finally {
     if ($null -ne $PageResponse) {
         $PageResponse.Dispose()
     }
-    if ($null -ne $Multipart) {
-        $Multipart.Dispose()
-    }
-    if ($null -ne $FileContent) {
-        $FileContent.Dispose()
-    }
-    if ($null -ne $FileStream) {
-        $FileStream.Dispose()
-    }
+    Close-UploadContent
     if ($null -ne $Client) {
         $Client.Dispose()
     }

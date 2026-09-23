@@ -52,7 +52,7 @@ log_message() {
 record_ledger() {
     local file_name="$1"
     local sha256="$2"
-    local status="$3"
+    local ledger_status="$3"
     local detail="$4"
     local effective_date="$(/bin/date '+%Y-%m-%d')"
 
@@ -63,7 +63,7 @@ record_ledger() {
         csv << %w[Timestamp FileName SHA256 Status EffectiveDate Detail] if new_file
         csv << [timestamp, name, hash, status, effective, detail]
       end
-    ' "$LEDGER" "$(/bin/date '+%Y-%m-%d %H:%M:%S')" "$file_name" "$sha256" "$status" "$effective_date" "$detail"
+    ' "$LEDGER" "$(/bin/date '+%Y-%m-%d %H:%M:%S')" "$file_name" "$sha256" "$ledger_status" "$effective_date" "$detail"
 }
 
 cleanup() {
@@ -257,7 +257,7 @@ post_result="$(curl_with_ntlm \
     --form-string "ProductPriceChangeFileModel.EffectiveDate=$effective_date" \
     --form-string 'ProductPriceChangeFileModel.ProcessFrequently=true' \
     --form-string 'ProductPriceChangeFileModel.ProcessFrequently=false' \
-    --form "file=@$PROCESSING_FILE;type=text/csv" \
+    --form "file=@\"$PROCESSING_FILE\";type=text/csv" \
     "$UPLOAD_URL")" || fail_run 'SmartPak submission request failed. Verify the SmartPak UI before retrying.'
 
 post_status="${post_result%%|*}"
@@ -285,4 +285,3 @@ record_ledger \
     "HTTP $post_status; FinalUrl=$post_url; Response=$RESPONSE_FILE"
 
 log_message INFO "Submission accepted and file archived: $archive_path"
-

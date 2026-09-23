@@ -10,13 +10,13 @@ for directory in Incoming Processing Archive Failed Logs State Scripts LaunchAge
     /bin/mkdir -p "$ROOT_PATH/$directory"
 done
 
-read "smartpak_username?SmartPak username (DOMAIN\\alias): "
+read -r "smartpak_username?SmartPak username (DOMAIN\\alias): "
 if [[ -z "$smartpak_username" ]]; then
     print -u2 'A username is required.'
     exit 1
 fi
 
-read -s "smartpak_password?SmartPak password: "
+read -rs "smartpak_password?SmartPak password: "
 print
 if [[ -z "$smartpak_password" ]]; then
     print -u2 'A password is required.'
@@ -42,4 +42,3 @@ print
 print "SmartPak macOS automation initialized under: $ROOT_PATH"
 print 'The password is stored in macOS Keychain.'
 print 'Production submission remains disabled.'
-

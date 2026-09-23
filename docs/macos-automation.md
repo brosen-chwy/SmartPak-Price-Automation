@@ -30,9 +30,14 @@ The dry run validates the CSV, checks duplicate hashes, authenticates, captures 
 
 ## LaunchAgent
 
-The included property list runs the dry run every 15 minutes. Validate it before installation:
+The included property list runs the dry run every 15 minutes. The executable copy is kept in local Application Support because macOS `launchd` cannot reliably execute scripts directly from a File Provider-managed OneDrive folder. OneDrive remains the location for incoming files, archives, state, and logs.
+
+Install the local executable copy and validate the property list:
 
 ```zsh
+mkdir -p "$HOME/Library/Application Support/SmartPakPriceAutomation"
+cp "$HOME/Library/CloudStorage/OneDrive-Chewy.com,LLC/SmartPak/Pricing/PriceMatching/Scripts/SmartPakPriceUpload.zsh" "$HOME/Library/Application Support/SmartPakPriceAutomation/SmartPakPriceUpload.zsh"
+chmod 700 "$HOME/Library/Application Support/SmartPakPriceAutomation/SmartPakPriceUpload.zsh"
 plutil -lint "$HOME/Library/CloudStorage/OneDrive-Chewy.com,LLC/SmartPak/Pricing/PriceMatching/LaunchAgents/com.chewy.smartpak-price-upload.plist"
 ```
 
@@ -55,4 +60,3 @@ SMARTPAK_PRODUCTION_UPLOAD_ENABLED
 ```
 
 Keep the LaunchAgent in `--dry-run` mode until a controlled no-op macOS upload succeeds. Changing the LaunchAgent to `--submit` should occur only after that test and an explicit operational decision.
-

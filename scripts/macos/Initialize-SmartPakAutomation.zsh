@@ -5,6 +5,7 @@ set -euo pipefail
 DEFAULT_ROOT="$HOME/Library/CloudStorage/OneDrive-Chewy.com,LLC/SmartPak/Pricing/PriceMatching"
 ROOT_PATH="${SMARTPAK_ROOT:-$DEFAULT_ROOT}"
 KEYCHAIN_SERVICE='com.chewy.smartpak-price-upload'
+LOCAL_SCRIPT_ROOT="$HOME/Library/Application Support/SmartPakPriceAutomation"
 
 for directory in Incoming Processing Archive Failed Logs State Scripts LaunchAgents; do
     /bin/mkdir -p "$ROOT_PATH/$directory"
@@ -37,6 +38,12 @@ unset smartpak_password
 for script in "$ROOT_PATH"/Scripts/*.zsh(N); do
     /bin/chmod 700 "$script"
 done
+
+/bin/mkdir -p "$LOCAL_SCRIPT_ROOT"
+if [[ -f "$ROOT_PATH/Scripts/SmartPakPriceUpload.zsh" ]]; then
+    /bin/cp "$ROOT_PATH/Scripts/SmartPakPriceUpload.zsh" "$LOCAL_SCRIPT_ROOT/SmartPakPriceUpload.zsh"
+    /bin/chmod 700 "$LOCAL_SCRIPT_ROOT/SmartPakPriceUpload.zsh"
+fi
 
 print
 print "SmartPak macOS automation initialized under: $ROOT_PATH"

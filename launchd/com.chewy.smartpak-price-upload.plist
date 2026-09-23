@@ -7,7 +7,7 @@
     <key>ProgramArguments</key>
     <array>
         <string>/bin/zsh</string>
-        <string>/Users/brosen/Library/CloudStorage/OneDrive-Chewy.com,LLC/SmartPak/Pricing/PriceMatching/Scripts/SmartPakPriceUpload.zsh</string>
+        <string>/Users/brosen/Library/Application Support/SmartPakPriceAutomation/SmartPakPriceUpload.zsh</string>
         <string>--dry-run</string>
     </array>
     <key>StartInterval</key>
@@ -20,4 +20,3 @@
     <string>/Users/brosen/Library/CloudStorage/OneDrive-Chewy.com,LLC/SmartPak/Pricing/PriceMatching/Logs/launchd.stderr.log</string>
 </dict>
 </plist>
-
